@@ -36,5 +36,22 @@ def run():
     puller = GitHubAutoPuller(repo_path="/home/rohit/work/github/spacewind")
     uvicorn.run(puller.app, host="0.0.0.0", port=9000)
 
+
+# github_auto_puller.py
+
+from fastapi import APIRouter, Request
+
+class GitHubWebhookHandler:
+    def __init__(self):
+        self.router = APIRouter()
+        self.router.post("/webhook")(self.webhook)
+
+    async def webhook(self, request: Request):
+        payload = await request.json()
+        print("Webhook received:", payload.get("head_commit", {}).get("message", "No commit message"))
+        return {"status": "ok"}
+
+
+
 if __name__ == "__main__":
     run()

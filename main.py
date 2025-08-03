@@ -6,8 +6,11 @@ import shutil
 import os
 import subprocess
 import uuid
+from github_auto_puller import GitHubWebhookHandler
 
 app = FastAPI()
+handler = GitHubWebhookHandler()
+app.include_router(handler.router)
 
 # Create folders if not exist
 os.makedirs("uploads", exist_ok=True)
@@ -42,3 +45,9 @@ async def convert_to_pdf(request: Request, file: UploadFile = File(...)):
         })
     else:
         return templates.TemplateResponse("index.html", {"request": request, "error": "Conversion failed."})
+
+@app.post("/webhook")
+async def handle_webhook(request: Request):
+    payload = await request.json()
+    print("Received webhook:", payload)
+    return {"status": "ok"}
