@@ -1,23 +1,34 @@
-# github_auto_puller.py
-
-from fastapi import APIRouter, Request
+import os
 import subprocess
+import logging
 
-class GitHubWebhookHandler:
-    def __init__(self):
-        self.router = APIRouter()
-        self.router.post("/webhook")(self.webhook)
+class GitAutoPuller:
+    def __init__(self, repo_path: str):
+        self.repo_path = repo_path
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s [%(levelname)s] %(message)s",
+            handlers=[logging.StreamHandler()]
+        )
 
-    async def webhook(self, request: Request):
+    def pull(self):
+        logging.info(f"Trying to pull latest changes in: {self.repo_path}")
         try:
-            payload = await request.json()
-            commit_msg = payload.get("head_commit", {}).get("message", "No commit message")
-            print(f"Webhook received: {commit_msg}")
-
-            # Pull the latest changes
-            subprocess.run(["git", "pull"], check=True)
-            return {"status": "pulled", "commit": commit_msg}
-
+            result = subprocess.run(
+                ["git", "pull"],
+                cwd=self.repo_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            if result.returncode == 0:
+                logging.info("Git pull successful.")
+                logging.info(result.stdout)
+                return {"status": "success", "details": result.stdout}
+            else:
+                logging.error("Git pull failed.")
+                logging.error(result.stderr)
+                return {"status": "error", "details": result.stderr}
         except Exception as e:
-            print("Error handling webhook:", str(e))
+            logging.exception("Exception occurred while pulling repo.")
             return {"status": "error", "details": str(e)}

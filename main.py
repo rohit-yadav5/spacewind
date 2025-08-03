@@ -1,61 +1,43 @@
-from fastapi import FastAPI, UploadFile, File, Request
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi import FastAPI, Request, UploadFile, File
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import shutil
 import os
-import subprocess
-import uuid
-from github_auto_puller import GitHubWebhookHandler
 
-# main.py
-
-from fastapi import FastAPI
-from github_auto_puller import GitHubWebhookHandler
+from converter.word_to_pdf import WordToPDFConverter
+from webhook.handler import GitHubWebhookHandler
 
 app = FastAPI()
 
-# Register the webhook route
-webhook_handler = GitHubWebhookHandler()
-app.include_router(webhook_handler.router)
+# Setup templates and static file mounts
+templates = Jinja2Templates(directory="templates")
+app.mount("/converted", StaticFiles(directory="converted"), name="converted")
 
-
-# Create folders if not exist
+# Create required folders
 os.makedirs("uploads", exist_ok=True)
 os.makedirs("converted", exist_ok=True)
 
-app.mount("/converted", StaticFiles(directory="converted"), name="converted")
-templates = Jinja2Templates(directory="templates")
+# Instantiate converter
+converter = WordToPDFConverter(upload_dir="uploads", output_dir="converted")
 
 @app.get("/", response_class=HTMLResponse)
-async def form(request: Request):
+async def show_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/convert")
-async def convert_to_pdf(request: Request, file: UploadFile = File(...)):
-    if not file.filename.endswith(".docx"):
-        return templates.TemplateResponse("index.html", {"request": request, "error": "Please upload a .docx file."})
-
-    file_id = str(uuid.uuid4())
-    input_path = f"uploads/{file_id}.docx"
-    output_path = f"converted/{file_id}.pdf"
-
-    with open(input_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    # Convert using LibreOffice (must be installed)
-    subprocess.run(["libreoffice", "--headless", "--convert-to", "pdf", "--outdir", "converted", input_path])
-
-    if os.path.exists(output_path):
+async def convert_file(request: Request, file: UploadFile = File(...)):
+    result = await converter.convert(file)
+    if result["success"]:
         return templates.TemplateResponse("index.html", {
             "request": request,
-            "download_link": f"/converted/{file_id}.pdf"
+            "download_link": result["download_link"]
         })
     else:
-        return templates.TemplateResponse("index.html", {"request": request, "error": "Conversion failed."})
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "error": result["error"]
+        })
 
-@app.post("/webhook")
-async def handle_webhook(request: Request):
-    payload = await request.json()
-    print("Received webhook:", payload)
-    return {"status": "ok"}
+# GitHub webhook
+webhook_handler = GitHubWebhookHandler(repo_path="/home/rohit/work/github/spacewind")
+app.include_router(webhook_handler.router)
