@@ -41,6 +41,3 @@ async def convert_file(request: Request, file: UploadFile = File(...)):
 # GitHub webhook
 webhook_handler = GitHubWebhookHandler(repo_path="/home/rohit/work/github/spacewind")
 app.include_router(webhook_handler.router)
-
-
-print("hi can you see me")
