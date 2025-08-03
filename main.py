@@ -8,9 +8,17 @@ import subprocess
 import uuid
 from github_auto_puller import GitHubWebhookHandler
 
+# main.py
+
+from fastapi import FastAPI
+from github_auto_puller import GitHubWebhookHandler
+
 app = FastAPI()
-handler = GitHubWebhookHandler()
-app.include_router(handler.router)
+
+# Register the webhook route
+webhook_handler = GitHubWebhookHandler()
+app.include_router(webhook_handler.router)
+
 
 # Create folders if not exist
 os.makedirs("uploads", exist_ok=True)
