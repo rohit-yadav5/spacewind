@@ -22,4 +22,4 @@ class GitHubWebhookHandler:
             output = subprocess.check_output(["git", "pull"], cwd=self.repo_path)
             return output.decode("utf-8")
         except subprocess.CalledProcessError as e:
-            return f"Error during pull: {e.output.decode('utf-8')}"
+            return f"Error during pull: {e.output.decode('utf-8')}" 

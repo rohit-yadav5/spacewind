@@ -38,6 +38,6 @@ async def convert_file(request: Request, file: UploadFile = File(...)):
             "error": result["error"]
         })
 
-# GitHub webhook
+# GitHub webhook for pulling latest changes from the github repository
 webhook_handler = GitHubWebhookHandler(repo_path="/home/rohit/work/github/spacewind")
 app.include_router(webhook_handler.router)
