@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    
+    <meta charset="UTF-8">
+    <title>Space Wind | Rohit Yadav</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- PNG Fallback for older browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/mini_logo.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/images/mini_logo.png">
+    <!-- SVG for modern browsers -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/mini_logo.svg">
+
+
+    
+    <!-- Link to your stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+
+
+
+<body>
+    <!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="container">
+        <!-- Primary Logo -->
+        <a href="index.html" class="main-logo">
+            <div class="space-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="planetGrad" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#81c784"/>
+                            <stop offset="70%" stop-color="#64b5f6"/>
+                            <stop offset="100%" stop-color="#3f51b5"/>
+                        </radialGradient>
+                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(100,181,246,0.8)"/>
+                            <stop offset="50%" stop-color="rgba(159,168,218,0.6)"/>
+                            <stop offset="100%" stop-color="rgba(100,181,246,0.8)"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Orbital rings -->
+                    <ellipse cx="50" cy="50" rx="45" ry="15" fill="none" stroke="url(#ringGrad)" stroke-width="2" opacity="0.7"/>
+                    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity="0.5"/>
+                    
+                    <!-- Planet -->
+                    <circle cx="50" cy="50" r="20" fill="url(#planetGrad)"/>
+                    
+                    <!-- Wind streams -->
+                    <path d="M 15 30 Q 25 25 35 30 Q 45 35 55 30" stroke="#9fa8da" stroke-width="2" fill="none" opacity="0.8"/>
+                    <path d="M 20 70 Q 30 65 40 70 Q 50 75 60 70 Q 70 65 80 70" stroke="#64b5f6" stroke-width="2" fill="none" opacity="0.6"/>
+                    
+                    <!-- Stars -->
+                    <circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.9"/>
+                    <circle cx="80" cy="25" r="1" fill="#64b5f6" opacity="0.8"/>
+                    <circle cx="85" cy="80" r="1.2" fill="#9fa8da" opacity="0.7"/>
+                    <circle cx="10" cy="75" r="0.8" fill="#81c784" opacity="0.9"/>
+                </svg>
+            </div>
+            <span class="logo-text">SpaceWind</span>
+        </a>
+
+
+
+        
+        <!-- Navigation Links -->
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+    <main>
+        <section class="hero" style="max-width: 900px;">
+            <h1 style="margin-bottom: 20px;">My Projects</h1>
+            <div class="projects-grid">
+
+
+
+
+                <!-- Project Card 1 -->
+                <div class="project-card">
+                    <i class="fas fa-calculator project-icon"></i>
+                    <h2>Simple Calculator</h2>
+                    <p>A basic web calculator built with <strong>HTML, CSS, and JavaScript</strong>. Try out real-time calculations in your browser.</p>
+                    <a href="https://your-live-calculator-link.com" class="btn-main" target="_blank">View Live</a>
+                    <a href="https://github.com/YOUR_USERNAME/calculator" class="btn-main" style="background:#21314d;" target="_blank">GitHub</a>
+                </div>
+
+
+
+
+
+                <!-- Project Card 2 -->
+                <div class="project-card">
+                    <i class="fas fa-globe project-icon"></i>
+                    <h2>This Portfolio Website</h2>
+                    <p>Designed and coded from scratch, this site showcases my web dev skills and responsive design ability. Hosted via GitHub and Cloudflare Tunnel.</p>
+                    <a href="index.html" class="btn-main">Visit Site</a>
+                    <a href="https://github.com/YOUR_USERNAME/spacewind_v2" class="btn-main" style="background:#21314d;" target="_blank">GitHub</a>
+                </div>
+
+
+
+
+
+                <!-- Project Card 3 -->
+                <div class="project-card">
+                    <i class="fas fa-film project-icon"></i>
+                    <h2>Movie Search App</h2>
+                    <p>React app that lets you search for movies using a public REST API. Implements hooks and dynamic rendering for a seamless UX.<br>
+                    <strong>Status:</strong> Coming Soon</p>
+                    <!-- No live link yet -->
+                    <a href="https://github.com/YOUR_USERNAME/movie-search-app" class="btn-main" style="background:#21314d;" target="_blank">GitHub (Preview)</a>
+                </div>
+
+
+
+
+
+                <!-- Project Card 4 -->
+                <div class="project-card">
+                    <i class="fas fa-"></i>
+                    <h2>Word To Pdf</h2>
+                    <p>An online Word to pdf converter which helps you to convert your doc, docx file to pdf file<br>
+                    <strong>Status:</strong> Online </p>
+                    <!-- No live link yet -->
+
+                    <a href="wort_to_pdf.html" class="btn-main" style="background:#21314d;" target="_blank">Word to PDF</a>
+                </div>
+
+
+
+
+
+                <!-- Add more projects as needed -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Rohit Yadav. All rights reserved.</p>
+    </footer>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+    background: #181a20;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.navbar .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 24px;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #37B7E9;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: #ececec;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+    color: #37B7E9;
+    border-bottom: 2px solid #37B7E9;
+}
+
+/* Main Hero Section */
+.hero {
+    max-width: 680px;
+    margin: 60px auto 0 auto;
+    background: #fff;
+    padding: 36px 32px 40px 32px;
+    border-radius: 15px;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.07);
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    color: #21236c;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.08rem;
+    margin-bottom: 14px;
+    color: #495057;
+}
+
+.btn-main {
+    display: inline-block;
+    margin-top: 18px;
+    background: #37B7E9;
+    color: #fff;
+    padding: 13px 36px;
+    font-size: 1.05rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(55,183,233,0.10);
+    transition: background 0.18s, transform 0.16s;
+}
+
+.btn-main:hover {
+    background: #1C93B8;
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background: #21314d;
+    color: #d5e3ef;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1rem;
+    letter-spacing: .03em;
+}
+
+/* Responsive: Mobile */
+@media (max-width: 600px) {
+    .navbar .container {
+        flex-direction: column;
+        padding: 10px 10px;
+        gap: 10px;
+    }
+
+    .hero {
+        margin: 32px 6px 0 6px;
+        padding: 20px 10px 28px 10px;
+    }
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    .nav-links {
+        gap: 1rem;
+    }
+}
+
+
+
+
+
+/* for about.html */
+strong { color: #163a45; }
+
+
+.hero .icon-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin: 24px 0;
+}
+.hero .icon-box {
+    min-width: 105px;
+    text-align: left;
+}
+.hero .icon-box i {
+    color: #37B7E9;
+    font-size: 1.6em;
+}
+
+
+
+
+
+/* for projects.html */
+.projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 36px;
+}
+
+.project-card {
+    flex: 1 1 260px;
+    max-width: 300px;
+    background: #fafcff;
+    border-radius: 12px;
+    box-shadow: 0 2px 14px rgba(33,49,77,0.08);
+    padding: 28px 18px 26px 18px;
+    text-align: center;
+    transition: transform 0.20s, box-shadow 0.20s;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 335px;
+}
+
+.project-card:hover {
+    transform: translateY(-6px) scale(1.022);
+    box-shadow: 0 10px 26px rgba(33,49,77,0.22);
+}
+
+.project-icon {
+    font-size: 2.2em;
+    color: #37B7E9;
+    margin-bottom: 10px;
+}
+.project-card h2 {
+    font-size: 1.18em;
+    margin-bottom: 12px;
+    color: #21236c;
+}
+.project-card p {
+    font-size: 0.97em;
+    margin-bottom: 20px;
+    color: #495057;
+    flex: 1;
+}
+@media (max-width: 800px) {
+    .projects-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .project-card {
+        width: 95%;
+        max-width: 500px;
+    }
+}
+
+
+
+/* for contact.html */
+.contact-form input,
+.contact-form textarea {
+    padding: 12px 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1.5px solid #c7e5ef;
+    margin-bottom: 8px;
+    background: #f6fcff;
+    color: #222;
+    outline: none;
+    transition: border 0.16s;
+    width: 100%;
+    resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #37B7E9;
+}
+
+.contact-form button[type="submit"] {
+    width: 100%;
+    font-size: 1.08em;
+}
+
+
+
+
+
+/* for main logo */
+.main-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 12px;
+    background: linear-gradient(45deg, rgba(100, 181, 246, 0.1), rgba(159, 168, 218, 0.1));
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.main-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(100, 181, 246, 0.3);
+}
+
+.space-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.space-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 5px rgba(100, 181, 246, 0.5));
+}
+
+.logo-text {
+    background: linear-gradient(135deg, #64b5f6 0%, #9fa8da 50%, #81c784 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}

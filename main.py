@@ -1,43 +1,30 @@
-from fastapi import FastAPI, Request, UploadFile, File
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from backend.wordtopdf.converter import router as converter_router
+from backend.github_auto_puller import GitAutoPuller
+from backend.webhook.handler import router as webhook_router
 import os
-
-from converter.word_to_pdf import WordToPDFConverter
-from webhook.handler import GitHubWebhookHandler
 
 app = FastAPI()
 
-# Setup templates and static file mounts
-templates = Jinja2Templates(directory="templates")
+# Mount static and templates
+os.makedirs("converted", exist_ok=True)
 app.mount("/converted", StaticFiles(directory="converted"), name="converted")
 
-# Create required folders
-os.makedirs("uploads", exist_ok=True)
-os.makedirs("converted", exist_ok=True)
+# Include the Word-to-PDF route
+app.include_router(converter_router)
 
-# Instantiate converter
-converter = WordToPDFConverter(upload_dir="uploads", output_dir="converted")
+# Include GitHub webhook handler route
+app.include_router(webhook_router)
 
-@app.get("/", response_class=HTMLResponse)
-async def show_form(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+# Auto Git Pull setup (if needed directly here, optional)
+REPO_PATH = "/home/rohit/work/github/spacewind"
+puller = GitAutoPuller(REPO_PATH)
 
-@app.post("/convert")
-async def convert_file(request: Request, file: UploadFile = File(...)):
-    result = await converter.convert(file)
-    if result["success"]:
-        return templates.TemplateResponse("index.html", {
-            "request": request,
-            "download_link": result["download_link"]
-        })
-    else:
-        return templates.TemplateResponse("index.html", {
-            "request": request,
-            "error": result["error"]
-        })
-
-# GitHub webhook for pulling latest changes from the github repository
-webhook_handler = GitHubWebhookHandler(repo_path="/home/rohit/work/github/spacewind")
-app.include_router(webhook_handler.router)
+@app.post("/webhook-direct")
+async def webhook_direct(request: Request):
+    """Fallback: Direct webhook handler if needed"""
+    data = await request.json()
+    if data.get("ref") == "refs/heads/main":
+        return puller.pull()
+    return {"message": "Not main branch, ignored"}

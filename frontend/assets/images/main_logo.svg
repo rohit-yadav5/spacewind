@@ -1,0 +1,30 @@
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="planetGrad" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#81c784"/>
+                            <stop offset="70%" stop-color="#64b5f6"/>
+                            <stop offset="100%" stop-color="#3f51b5"/>
+                        </radialGradient>
+                        <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#64b5f6"/>
+                            <stop offset="50%" stop-color="#9fa8da"/>
+                            <stop offset="100%" stop-color="#81c784"/>
+                        </linearGradient>
+                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(100,181,246,0.8)"/>
+                            <stop offset="50%" stop-color="rgba(159,168,218,0.6)"/>
+                            <stop offset="100%" stop-color="rgba(100,181,246,0.8)"/>
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(10, 15)">
+                        <ellipse cx="25" cy="25" rx="22" ry="7.5" fill="none" stroke="url(#ringGrad)" stroke-width="1" opacity="0.7"/>
+                        <ellipse cx="25" cy="25" rx="19" ry="6" fill="none" stroke="url(#ringGrad)" stroke-width="0.8" opacity="0.5"/>
+                        <circle cx="25" cy="25" r="10" fill="url(#planetGrad)"/>
+                        <path d="M 7.5 15 Q 12.5 12.5 17.5 15 Q 22.5 17.5 27.5 15" stroke="#9fa8da" stroke-width="1" fill="none" opacity="0.8"/>
+                        <path d="M 10 35 Q 15 32.5 20 35 Q 25 37.5 30 35 Q 35 32.5 40 35" stroke="#64b5f6" stroke-width="1" fill="none" opacity="0.6"/>
+                        <circle cx="10" cy="10" r="0.8" fill="#ffffff" opacity="0.9"/>
+                        <circle cx="40" cy="12.5" r="0.5" fill="#64b5f6" opacity="0.8"/>
+                        <circle cx="42.5" cy="40" r="0.6" fill="#9fa8da" opacity="0.7"/>
+                    </g>
+                    <text x="70" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="url(#textGrad)">SpaceWind</text>
+                </svg>
