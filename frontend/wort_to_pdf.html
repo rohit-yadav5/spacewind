@@ -90,16 +90,54 @@
 
 
 
-    <!-- Main Content -->
+<!-- Main Content -->
+
+
+
     <h1>Upload .docx file to convert to PDF</h1>
-    {% if error %}
-    <p style="color:red;">{{ error }}</p>
-    {% endif %}
-    <form action="/backend/wordtopdf/" enctype="multipart/form-data" method="post">
+
+    <p id="error" style="color:red; display:none;"></p>
+
+    <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" accept=".docx" required>
         <button type="submit">Convert</button>
     </form>
 
-    {% if download_link %}
-    <p>✅ Conversion successful! <a href="{{ download_link }}">Download PDF</a></p>
-    {% endif %}
+    <p id="success" style="display:none;">
+        ✅ Conversion successful! <a id="downloadLink" href="#">Download PDF</a>
+    </p>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            try {
+                let response = await fetch('http://127.0.0.1:8500/convert', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                let result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('error').style.display = 'none';
+                    document.getElementById('success').style.display = 'block';
+                    document.getElementById('downloadLink').href = result.download_link;
+
+                } else {
+                    document.getElementById('success').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = result.error;
+                }
+            } catch (err) {
+                document.getElementById('success').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Error connecting to server.';
+            }
+        });
+    </script>
+
+
+</body>

@@ -22,4 +22,10 @@ class GitHubWebhookHandler:
             output = subprocess.check_output(["git", "pull"], cwd=self.repo_path)
             return output.decode("utf-8")
         except subprocess.CalledProcessError as e:
-            return f"Error during pull: {e.output.decode('utf-8')}" 
+            return f"Error during pull: {e.output.decode('utf-8')}"
+
+# ✅ Instance + top-level router
+webhook_handler_instance = GitHubWebhookHandler(
+    repo_path="/home/rohit/work/github/spacewind"
+)
+router = webhook_handler_instance.router
