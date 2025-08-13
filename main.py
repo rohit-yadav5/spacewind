@@ -43,9 +43,9 @@ if RUN_WORDTOPDF:
     os.makedirs(converted_path, exist_ok=True)
     app.mount("/converted", StaticFiles(directory=converted_path), name="converted")
     app.include_router(converter_router)
-    print("✅ Word-to-PDF feature: ENABLED")
+    print("\n✅ Word-to-PDF feature: ENABLED")
 else:
-    print("❌ Word-to-PDF feature: DISABLED")
+    print("\n❌ Word-to-PDF feature: DISABLED")
 
 
 
@@ -57,9 +57,9 @@ if RUN_FRONTEND:
     app.include_router(webhook_router)
     # Serve static HTML/CSS/JS from the 'frontend' folder
     app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
-    print("✅ Frontend feature: ENABLED")
+    print("\n✅ Frontend feature: ENABLED")
 else:
-    print("❌ Frontend feature: DISABLED")
+    print("\n❌ Frontend feature: DISABLED")
 
 
 
