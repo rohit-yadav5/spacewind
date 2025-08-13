@@ -1,2 +1,6 @@
 venv/
 __pycache__/
+backend/wordtopdf/converted/
+backend/wordtopdf/__pycache__/
+backend/wordtopdf/uploads/
+backend/web/__pycache__/
