@@ -32,3 +32,5 @@ class GitAutoPuller:
         except Exception as e:
             logging.exception("Exception occurred while pulling repo.")
             return {"status": "error", "details": str(e)}
+
+#v1 main release

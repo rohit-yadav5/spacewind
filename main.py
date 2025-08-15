@@ -81,3 +81,5 @@ async def webhook_direct(request: Request):
     if data.get("ref") == "refs/heads/main":
         return puller.pull()
     return {"message": "Not main branch, ignored"}
+
+# v1 main release

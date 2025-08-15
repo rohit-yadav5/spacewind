@@ -1,6 +1,7 @@
 venv/
 __pycache__/
 backend/wordtopdf/converted/
+backend/web/__pycache__/
 backend/wordtopdf/__pycache__/
 backend/wordtopdf/uploads/
-backend/web/__pycache__/
+.DS_Store
