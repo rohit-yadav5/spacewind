@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 import os
+import subprocess
 
 
 
@@ -9,8 +10,7 @@ import os
 # === Feature Flags ===
 RUN_WORDTOPDF = True
 RUN_FRONTEND = True
-
-
+RUN_PORTFOLIO = True
 
 
 
@@ -61,6 +61,23 @@ if RUN_FRONTEND:
 else:
     print("\n❌ Frontend feature: DISABLED")
 
+
+
+
+
+# === Portfolio feature setup ===
+if RUN_PORTFOLIO:
+    portfolio_path = os.path.join("frontend", "rohit")
+    if os.path.exists(portfolio_path):
+        print(f"\n✅ Portfolio feature: ENABLED (Serving {portfolio_path} on port 5005)")
+        subprocess.Popen(
+            ["python3", "-m", "http.server", "5505"],
+            cwd=portfolio_path
+        )
+    else:
+        print(f"\n⚠ Portfolio folder not found: {portfolio_path}")
+else:
+    print("\n❌ Portfolio feature: DISABLED")
 
 
 
