@@ -67,7 +67,7 @@ else:
 
 # === Portfolio feature setup ===
 if RUN_PORTFOLIO:
-    portfolio_path = os.path.join("frontend", "rohit")
+    portfolio_path = os.path.join("rohit")
     if os.path.exists(portfolio_path):
         print(f"\n✅ Portfolio feature: ENABLED (Serving {portfolio_path} on port 5005)")
         subprocess.Popen(
