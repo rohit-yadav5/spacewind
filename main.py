@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 import os
 import subprocess
+import sys
 
 
 
@@ -13,14 +14,17 @@ RUN_FRONTEND = True
 RUN_PORTFOLIO = True
 
 
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Conditional imports
-if RUN_WORDTOPDF:
-    from backend.wordtopdf.converter import router as converter_router
-if RUN_FRONTEND:
-    from backend.webhook.handler import router as webhook_router
+BACKEND_DIR = os.path.join(BASE_DIR, "main_sapacewind", "backend")
+sys.path.append(BACKEND_DIR)
 
-from backend.github_auto_puller import GitAutoPuller
+if RUN_WORDTOPDF:
+    from wordtopdf.converter import router as converter_router
+if RUN_FRONTEND:
+    from webhook.handler import router as webhook_router
+
+from github_auto_puller import GitAutoPuller
 
 app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # === Word-to-PDF setup ===
 if RUN_WORDTOPDF:
-    converted_path = os.path.join(BASE_DIR, "backend", "wordtopdf", "converted")
+    converted_path = os.path.join(BACKEND_DIR, "wordtopdf", "converted")
     os.makedirs(converted_path, exist_ok=True)
     app.mount("/converted", StaticFiles(directory=converted_path), name="converted")
     app.include_router(converter_router)
@@ -47,7 +51,7 @@ else:
 
 # === Frontend setup ===
 if RUN_FRONTEND:
-    frontend_path = os.path.join(BASE_DIR, "frontend")
+    frontend_path = os.path.join(BASE_DIR, "main_sapacewind", "frontend")
     app.include_router(webhook_router)
     app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
     print("\n✅ Frontend feature: ENABLED")
