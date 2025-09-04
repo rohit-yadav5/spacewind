@@ -1,158 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
-
+<!doctype html>
+<html lang="en" data-page="projects">
 <head>
-    
-    <meta charset="UTF-8">
-    <title>Space Wind | Rohit Yadav</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <!-- PNG Fallback for older browsers -->
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/mini_logo.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="assets/images/mini_logo.png">
-    <!-- SVG for modern browsers -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/mini_logo.svg">
-
-
-    
-    <!-- Link to your stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Spacewind projects — live tools and upcoming experiments in AI & GenAI.">
+  <title>Projects · Spacewind</title>
+  <link rel="preload" href="/assets/SpaceWind_Logo1.png" as="image">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="assets/SpaceWind_Logo.png">
 </head>
-
-
-
-
 <body>
-    <!-- Navigation Bar -->
-<nav class="navbar">
-    <div class="container">
-        <!-- Primary Logo -->
-        <a href="index.html" class="main-logo">
-            <div class="space-icon">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="planetGrad" cx="0.3" cy="0.3">
-                            <stop offset="0%" stop-color="#81c784"/>
-                            <stop offset="70%" stop-color="#64b5f6"/>
-                            <stop offset="100%" stop-color="#3f51b5"/>
-                        </radialGradient>
-                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="rgba(100,181,246,0.8)"/>
-                            <stop offset="50%" stop-color="rgba(159,168,218,0.6)"/>
-                            <stop offset="100%" stop-color="rgba(100,181,246,0.8)"/>
-                        </linearGradient>
-                    </defs>
-                    
-                    <!-- Orbital rings -->
-                    <ellipse cx="50" cy="50" rx="45" ry="15" fill="none" stroke="url(#ringGrad)" stroke-width="2" opacity="0.7"/>
-                    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity="0.5"/>
-                    
-                    <!-- Planet -->
-                    <circle cx="50" cy="50" r="20" fill="url(#planetGrad)"/>
-                    
-                    <!-- Wind streams -->
-                    <path d="M 15 30 Q 25 25 35 30 Q 45 35 55 30" stroke="#9fa8da" stroke-width="2" fill="none" opacity="0.8"/>
-                    <path d="M 20 70 Q 30 65 40 70 Q 50 75 60 70 Q 70 65 80 70" stroke="#64b5f6" stroke-width="2" fill="none" opacity="0.6"/>
-                    
-                    <!-- Stars -->
-                    <circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.9"/>
-                    <circle cx="80" cy="25" r="1" fill="#64b5f6" opacity="0.8"/>
-                    <circle cx="85" cy="80" r="1.2" fill="#9fa8da" opacity="0.7"/>
-                    <circle cx="10" cy="75" r="0.8" fill="#81c784" opacity="0.9"/>
-                </svg>
-            </div>
-            <span class="logo-text">SpaceWind</span>
-        </a>
+<header class="site-header reveal">
+  <a class="brand" href="index.html">
+    <img src="assets/SpaceWind_Logo2.png" alt="Spacewind logo" width="28" height="28">
+  </a>
+  <nav class="nav">
+    <a href="index.html" data-nav="home">Home</a>
+    <a href="projects.html" data-nav="projects">Projects</a>
+    <a href="contact.html" data-nav="contact">Contact</a>
+  </nav>
+</header>
+<main>
+
+<section class="section-head reveal">
+  <h1>Projects</h1>
+  <p class="muted">A mix of live tools and experiments. Tap a card to learn more.</p>
+</section>
 
 
 
-        
-        <!-- Navigation Links -->
-        <ul class="nav-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+
+<!-- all projects -->
+<section class="cards reveal">
+
+
+  <article class="project-card live">
+    <div class="status">Live</div>
+    <h3>SheepBot</h3>
+    <p>A fast playground for prompt design, versioning, and side-by-side evals.</p>
+    <a class="button small open align-left" href="#" aria-disabled="true">Open</a>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+  
+
+
+
+
+  <article class="project-card live">
+    <div class="status">Live</div>
+    <h3>Scyther</h3>
+    <p>A fast playground for prompt design, versioning, and side-by-side evals.</p>
+    <a class="button small open align-left" href="#" aria-disabled="true">Open</a>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+
+
+
+  <article class="project-card upcoming">
+    <div class="status">Coming soon</div>
+    <h3>Lawkar</h3>
+    <p>A fast playground for prompt design, versioning, and side-by-side evals.</p>
+    <button class="button small ghost" disabled>Stay Tuned</button>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+
+
+  
+  <article class="project-card upcoming">
+    <div class="status">Coming soon</div>
+    <h3>Nova Prompt Studio</h3>
+    <p>A fast playground for prompt design, versioning, and side-by-side evals.</p>
+    <button class="button small ghost" disabled>Stay Tuned</button>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+
+
+
+  <article class="project-card upcoming">
+    <div class="status">Coming soon</div>
+    <h3>Whisper Notes</h3>
+    <p>Lightweight browser-only voice notes with instant summary and actions.</p>
+    <button class="button small ghost" disabled>Stay Tuned</button>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+
+
+
+  <article class="project-card upcoming">
+    <div class="status">Coming soon</div>
+    <h3>Orbit</h3>
+    <p>Composable agents for repetitive workflows. Human-in-the-loop by design.</p>
+    <button class="button small ghost" disabled>Stay Tuned</button>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+
+
+
+  <article class="project-card upcoming">
+    <div class="status">Coming soon</div>
+    <h3>Lumina</h3>
+    <p>A visual canvas for multimodal experiments and quick-share demos.</p>
+    <button class="button small ghost" disabled>Stay Tuned</button>
+    <a class="button small align-right" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
+  </article>
+
+
+  <article class="project-card live large">
+    <h3>Mini Projects</h3>
+    <p>A collection of small experiments and mini projects. Click below to explore.</p>
+    <div class="button-row center">
+      <a class="button small open" href="mini_projects.html">Open</a>
+      <a class="button small" href="https://github.com/SpaceWind-Innovation" target="_blank" rel="noopener">GitHub</a>
     </div>
-</nav>
+  </article>
 
-
-    <main>
-        <section class="hero" style="max-width: 900px;">
-            <h1 style="margin-bottom: 20px;">My Projects</h1>
-            <div class="projects-grid">
+</section>
+<!-- projects end -->
 
 
 
 
-                <!-- Project Card 1 -->
-                <div class="project-card">
-                    <i class="fas fa-calculator project-icon"></i>
-                    <h2>Simple Calculator</h2>
-                    <p>A basic web calculator built with <strong>HTML, CSS, and JavaScript</strong>. Try out real-time calculations in your browser.</p>
-                    <a href="https://rohit-yadav5.github.io/calculator/" class="btn-main" target="_blank">View Live</a>
-                    <a href="https://github.com/rohit-yadav5/calculator?tab=readme-ov-file" class="btn-main" style="background:#21314d;" target="_blank">GitHub</a>
-                </div>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© <span id="year"></span> SpaceWind</p>
+    <nav class="footer-nav">
+      <ul class="footer-list">
+        <li><a href="privacy.html" class="link-button">Privacy Policy</a></li>
+        <li><a href="terms.html" class="link-button">Terms of Service</a></li>
+        <li><a href="cookies.html" class="link-button">Cookie Policy</a></li>
+        <li><a href="contact.html" class="link-button">Contact</a></li>
+      </ul>
+    </nav>
 
+</footer>
 
-
-
-
-                <!-- Project Card 2 -->
-                <div class="project-card">
-                    <i class="fas fa-globe project-icon"></i>
-                    <h2>This Portfolio Website</h2>
-                    <p>Designed and coded from scratch, this site showcases my web dev skills and responsive design ability. Hosted via GitHub and Cloudflare Tunnel.</p>
-                    <a href="https://rohit.spacewind.xyz/index.html" class="btn-main">Visit Site</a>
-                    <a href="https://github.com/rohit-yadav5/rohit-yadav5.github.io" class="btn-main" style="background:#21314d;" target="_blank">GitHub</a>
-                </div>
-
-
-
-
-
-                <!-- Project Card 3 -->
-                <div class="project-card">
-                    <i class="fas fa-film project-icon"></i>
-                    <h2>Movie Search App</h2>
-                    <p>React app that lets you search for movies using a public REST API. Implements hooks and dynamic rendering for a seamless UX.<br>
-                    <strong>Status:</strong> Coming Soon</p>
-                    <!-- No live link yet -->
-                    <a href="https://github.com/YOUR_USERNAME/movie-search-app" class="btn-main" style="background:#21314d;" target="_blank">GitHub (Preview)</a>
-                </div>
-
-
-
-
-
-                <!-- Project Card 4 -->
-                <div class="project-card">
-                    <i class="fas fa-"></i>
-                    <h2>Word To Pdf</h2>
-                    <p>An online Word to pdf converter which helps you to convert your doc, docx file to pdf file<br>
-                    <strong>Status:</strong> Online </p>
-                    <!-- No live link yet -->
-
-                    <a href="wort_to_pdf.html" class="btn-main" style="background:#21314d;" target="_blank">Word to PDF</a>
-                </div>
-
-
-
-
-
-                <!-- Add more projects as needed -->
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Rohit Yadav. All rights reserved.</p>
-    </footer>
-    <script src="assets/js/script.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>

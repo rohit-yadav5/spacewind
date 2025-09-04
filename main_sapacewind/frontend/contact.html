@@ -1,123 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-    
-
+<!doctype html>
+<html lang="en" data-page="contact">
 <head>
-    
-    <meta charset="UTF-8">
-    <title>Space Wind | Rohit Yadav</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <!-- PNG Fallback for older browsers -->
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/mini_logo.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="assets/images/mini_logo.png">
-    <!-- SVG for modern browsers -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/mini_logo.svg">
-
-
-    
-    <!-- Link to your stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Contact Spacewind — opportunities and partnerships.">
+  <title>Contact · Spacewind</title>
+  <link rel="preload" href="/assets/SpaceWind_Logo1.png" as="image">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="assets/SpaceWind_Logo.png">
 </head>
-
-
-
-
 <body>
+<header class="site-header reveal">
+  <a class="brand" href="index.html">
+    <img src="assets/SpaceWind_Logo2.png" alt="Spacewind logo" width="28" height="28">
+  </a>
+  <nav class="nav">
+    <a href="index.html" data-nav="home">Home</a>
+    <a href="projects.html" data-nav="projects">Projects</a>
+    <a href="contact.html" data-nav="contact">Contact</a>
+  </nav>
+</header>
+<main>
 
-        <!-- Navigation Bar -->
-<nav class="navbar">
-    <div class="container">
-        <!-- Primary Logo -->
-        <a href="index.html" class="main-logo">
-            <div class="space-icon">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="planetGrad" cx="0.3" cy="0.3">
-                            <stop offset="0%" stop-color="#81c784"/>
-                            <stop offset="70%" stop-color="#64b5f6"/>
-                            <stop offset="100%" stop-color="#3f51b5"/>
-                        </radialGradient>
-                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="rgba(100,181,246,0.8)"/>
-                            <stop offset="50%" stop-color="rgba(159,168,218,0.6)"/>
-                            <stop offset="100%" stop-color="rgba(100,181,246,0.8)"/>
-                        </linearGradient>
-                    </defs>
-                    
-                    <!-- Orbital rings -->
-                    <ellipse cx="50" cy="50" rx="45" ry="15" fill="none" stroke="url(#ringGrad)" stroke-width="2" opacity="0.7"/>
-                    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity="0.5"/>
-                    
-                    <!-- Planet -->
-                    <circle cx="50" cy="50" r="20" fill="url(#planetGrad)"/>
-                    
-                    <!-- Wind streams -->
-                    <path d="M 15 30 Q 25 25 35 30 Q 45 35 55 30" stroke="#9fa8da" stroke-width="2" fill="none" opacity="0.8"/>
-                    <path d="M 20 70 Q 30 65 40 70 Q 50 75 60 70 Q 70 65 80 70" stroke="#64b5f6" stroke-width="2" fill="none" opacity="0.6"/>
-                    
-                    <!-- Stars -->
-                    <circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.9"/>
-                    <circle cx="80" cy="25" r="1" fill="#64b5f6" opacity="0.8"/>
-                    <circle cx="85" cy="80" r="1.2" fill="#9fa8da" opacity="0.7"/>
-                    <circle cx="10" cy="75" r="0.8" fill="#81c784" opacity="0.9"/>
-                </svg>
-            </div>
-            <span class="logo-text">SpaceWind</span>
-        </a>
+<section class="section-head reveal">
+  <h1>Contact</h1>
+  <p class="muted">We’d love to hear from you. Choose the path that fits.</p>
+</section>
 
+<section class="reveal">
+  <form class="panel form-card" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="90d7efe9-745d-4311-9591-2165b1c40714">
+    <h2>Join Spacewind</h2>
+    <p class="muted">For roles, internships, or collaborations as an individual.</p>
+    <label>Full name
+      <input name="name" type="text" placeholder="Your name" required>
+    </label>
+    <label>Email
+      <input name="email" type="email" placeholder="you@email.com" required>
+    </label>
+    <label>Message
+      <textarea name="message" rows="4" placeholder="Tell us a bit about you and what you’d like to work on." required></textarea>
+    </label>
+    <button class="button" type="submit">Send</button>
+    <p class="form-status muted" aria-live="polite"></p>
+  </form>
 
+  <div class="contact-divider">
+    <h2 class="muted">Or</h2>
+    <p class="muted">Choose the option that best fits how you’d like to connect with us.</p>
+  </div>
 
-        
-        <!-- Navigation Links -->
-        <ul class="nav-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </div>
-</nav>
+  <form class="panel form-card" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="90d7efe9-745d-4311-9591-2165b1c40714">
+    <h2>Partner with Spacewind</h2>
+    <p class="muted">For companies and organizations exploring partnerships.</p>
+    <label>Company / Org
+      <input name="company" type="text" placeholder="Acme Co.">
+    </label>
+    <label>Contact email
+      <input name="email" type="email" placeholder="you@email.com" required>
+    </label>
+    <label>Message
+      <textarea name="message" rows="4" placeholder="What would you like to build together?" required></textarea>
+    </label>
+    <button class="button" type="submit">Send</button>
+    <p class="form-status muted" aria-live="polite"></p>
+  </form>
+</section>
 
+<div id="toast" class="toast" role="status" aria-live="polite" hidden>Thanks — we’ll be in touch!</div>
 
-    <!-- Contact Section -->
-    <main>
-        <section class="hero" style="max-width:600px;">
-            <h1>Contact Me</h1>
-            <p style="margin-bottom: 18px;">
-                Interested in working together, have a question, or just want to say hello? 
-                Use the form below or reach out through my email/social links!
-            </p>
-            <!-- Contact Form for illustration, backend action optional -->
-            <form class="contact-form" autocomplete="off" style="margin-top:20px;">
-                <div style="display:flex; gap:18px; flex-wrap: wrap;">
-                    <input type="text" name="name" placeholder="Your Name" required style="flex:1 1 120px;">
-                    <input type="email" name="email" placeholder="Your Email" required style="flex:1 1 120px;">
-                </div>
-                <textarea name="message" rows="5" placeholder="Your Message" required style="margin-top:16px; width:100%;"></textarea>
-                <button class="btn-main" type="submit" style="margin-top:14px;">Send Message</button>
-            </form>
-            
-            <!-- Or direct info -->
-            <div style="margin-top:32px; text-align:center; color:#163a45;">
-                <div style="margin-bottom: 8px;">
-                    <i class="fas fa-envelope" style="color:#37B7E9; margin-right:8px;"></i>
-                    <a href="mailto:your.email@example.com" style="color:#163a45; text-decoration:underline;">your.email@example.com</a>
-                </div>
-                <div>
-                    <i class="fab fa-github" style="color:#23272f; margin-right:8px;"></i>
-                    <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" style="color:#163a45; text-decoration:underline;">GitHub</a>
-                </div>
-                <!-- Add more socials if you like -->
-            </div>
-        </section>
-    </main>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© <span id="year"></span> SpaceWind</p>
+    <nav class="footer-nav">
+      <ul class="footer-list">
+        <li><a href="privacy.html" class="link-button">Privacy Policy</a></li>
+        <li><a href="terms.html" class="link-button">Terms of Service</a></li>
+        <li><a href="cookies.html" class="link-button">Cookie Policy</a></li>
+        <li><a href="contact.html" class="link-button">Contact</a></li>
+      </ul>
+    </nav>
 
-    <footer>
-        <p>&copy; 2025 Rohit Yadav. All rights reserved.</p>
-    </footer>
-    <script src="assets/js/script.js"></script>
+</footer>
+
+<script src="js/script.js"></script>
 </body>
 </html>
