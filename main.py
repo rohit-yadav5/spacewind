@@ -14,7 +14,14 @@ RUN_FRONTEND = True
 RUN_PORTFOLIO = True
 
 
+
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+
+
 # Conditional imports
 BACKEND_DIR = os.path.join(BASE_DIR, "main_sapacewind", "backend")
 sys.path.append(BACKEND_DIR)
@@ -37,7 +44,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+
 
 # === Word-to-PDF setup ===
 if RUN_WORDTOPDF:
@@ -49,6 +58,10 @@ if RUN_WORDTOPDF:
 else:
     print("\n❌ Word-to-PDF feature: DISABLED")
 
+
+
+
+
 # === Frontend setup ===
 if RUN_FRONTEND:
     frontend_path = os.path.join(BASE_DIR, "main_sapacewind", "frontend")
@@ -57,6 +70,10 @@ if RUN_FRONTEND:
     print("\n✅ Frontend feature: ENABLED")
 else:
     print("\n❌ Frontend feature: DISABLED")
+
+
+
+
 
 # === Portfolio feature setup ===
 if RUN_PORTFOLIO:
@@ -71,10 +88,6 @@ if RUN_PORTFOLIO:
         print(f"\n⚠ Portfolio folder not found: {portfolio_path}")
 else:
     print("\n❌ Portfolio feature: DISABLED")
-
-
-
-
 
 
 
