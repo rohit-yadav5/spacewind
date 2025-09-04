@@ -33,13 +33,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # === Word-to-PDF setup ===
 if RUN_WORDTOPDF:
-    converted_path = os.path.join("backend", "wordtopdf", "converted")
+    converted_path = os.path.join(BASE_DIR, "backend", "wordtopdf", "converted")
     os.makedirs(converted_path, exist_ok=True)
     app.mount("/converted", StaticFiles(directory=converted_path), name="converted")
     app.include_router(converter_router)
@@ -47,27 +45,18 @@ if RUN_WORDTOPDF:
 else:
     print("\n❌ Word-to-PDF feature: DISABLED")
 
-
-
-
-
 # === Frontend setup ===
 if RUN_FRONTEND:
-    # Serve webhook routes
+    frontend_path = os.path.join(BASE_DIR, "frontend")
     app.include_router(webhook_router)
-    # Serve static HTML/CSS/JS from the 'frontend' folder
-    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
     print("\n✅ Frontend feature: ENABLED")
 else:
     print("\n❌ Frontend feature: DISABLED")
 
-
-
-
-
 # === Portfolio feature setup ===
 if RUN_PORTFOLIO:
-    portfolio_path = os.path.join("rohit")
+    portfolio_path = os.path.join(BASE_DIR, "rohit")
     if os.path.exists(portfolio_path):
         print(f"\n✅ Portfolio feature: ENABLED (Serving {portfolio_path} on port 5005)")
         subprocess.Popen(
