@@ -74,6 +74,15 @@ else:
 
 
 
+# === word to pdf converter ===
+mini_projects_path = os.path.join(BASE_DIR, "main_sapacewind", "mini_projects")
+
+# Mount it as /mini_projects
+app.mount("/mini_projects", StaticFiles(directory=mini_projects_path, html=True), name="mini_projects")
+
+
+
+
 
 # === Portfolio feature setup ===
 if RUN_PORTFOLIO:
@@ -88,6 +97,11 @@ if RUN_PORTFOLIO:
         print(f"\n⚠ Portfolio folder not found: {portfolio_path}")
 else:
     print("\n❌ Portfolio feature: DISABLED")
+
+
+
+
+
 
 
 
