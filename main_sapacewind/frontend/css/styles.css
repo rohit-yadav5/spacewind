@@ -281,3 +281,16 @@ main {
   gap: 12px;
   margin-top: 12px;
 }
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.project-card .buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
