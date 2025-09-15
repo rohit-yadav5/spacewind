@@ -46,6 +46,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve static frontend
+from fastapi.staticfiles import StaticFiles
+FRONTEND_BUILD_DIR = os.path.join(BASE_DIR, "..", "..", "frontend", "build")
+app.mount("/", StaticFiles(directory=FRONTEND_BUILD_DIR, html=True), name="frontend")
+
 # Database create tables
 Base.metadata.create_all(bind=engine)
 
@@ -405,4 +410,4 @@ def health():
 if __name__ == '__main__':
     import uvicorn
     port = int(os.environ.get('PORT', 8600))
-    uvicorn.run('app.main:app', host='0.0.0.0', port=port)
+    uvicorn.run('app.main:app', host='0.0.0.0', port=port, workers=4)
