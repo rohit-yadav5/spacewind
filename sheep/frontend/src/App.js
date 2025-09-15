@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_BASE = "http://localhost:8600"; // Change if backend runs elsewhere
+const API_BASE = "https://api.sheep.spacewind.xyz"; // Cloudflare Tunnel hostname
 
 function App() {
   // Dark mode state
