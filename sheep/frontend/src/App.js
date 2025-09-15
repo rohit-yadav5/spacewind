@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_BASE = "http://0.0.0.0:8600"; // Change if backend runs elsewhere
+const API_BASE = "http://localhost:8600"; // Change if backend runs elsewhere
 
 function App() {
   // Dark mode state
