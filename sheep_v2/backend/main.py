@@ -203,4 +203,4 @@ async def query_documents(question: str):
 from fastapi.staticfiles import StaticFiles
 
 frontend_path = Path(__file__).parent.parent / "frontend"
-app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
