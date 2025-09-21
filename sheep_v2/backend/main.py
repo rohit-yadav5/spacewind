@@ -204,8 +204,8 @@ async def query_documents(question: str):
 
 app.include_router(api_router, prefix="/api")
 
-# Serve frontend (index.html, script.js, style.css)
+# Serve frontend (index.html, script.js, style.css) under /app
 from fastapi.staticfiles import StaticFiles
 
 frontend_path = Path(__file__).parent.parent / "frontend"
-app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")

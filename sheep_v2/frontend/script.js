@@ -1,6 +1,4 @@
-const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://127.0.0.1:8000/api"
-  : "https://sheep.spacewind.xyz/api";
+const API_BASE = window.location.origin + "/api"; // works both locally and online
 
 async function uploadFile() {
     const fileInput = document.getElementById("fileInput");
@@ -12,18 +10,16 @@ async function uploadFile() {
     const file = fileInput.files[0];
     const formData = new FormData();
     formData.append("file", file);
+
     try {
         const res = await fetch(`${API_BASE}/upload/`, {
             method: "POST",
             body: formData
         });
         const data = await res.json();
-        if (res.ok) {
-            uploadMsg.textContent = data.message;
-        } else {
-            uploadMsg.textContent = data.detail || "Upload failed.";
-        }
+        uploadMsg.textContent = res.ok ? data.message : (data.detail || "Upload failed.");
     } catch (err) {
+        console.error(err);
         uploadMsg.textContent = "Error uploading file.";
     }
 }
@@ -39,10 +35,8 @@ async function askQuestion() {
     userMsg.className = "message user";
     userMsg.textContent = question;
     chatDiv.appendChild(userMsg);
-
     questionInput.value = "";
 
-    // Fetch bot answer
     try {
         const res = await fetch(`${API_BASE}/query/?question=${encodeURIComponent(question)}`, {
             method: "POST"
@@ -53,6 +47,7 @@ async function askQuestion() {
         botMsg.textContent = data.answer || "No answer.";
         chatDiv.appendChild(botMsg);
     } catch (err) {
+        console.error(err);
         const botMsg = document.createElement("div");
         botMsg.className = "message bot";
         botMsg.textContent = "Error getting answer.";
