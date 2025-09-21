@@ -33,8 +33,7 @@ from fastapi_utils.tasks import repeat_every
 # api setup area
 app = FastAPI()
 
-api = "AIzaSyA20oTijrHh6sip6JWxdvke0ZvrVG02HsA"
-
+genai.configure(api_key="AIzaSyA20oTijrHh6sip6JWxdvke0ZvrVG02HsA")
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection("documents")
 
