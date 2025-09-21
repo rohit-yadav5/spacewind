@@ -1,4 +1,4 @@
-<file name=0 path=/Users/rohit/Library/Mobile Documents/com~apple~CloudDocs/Codes/GitHub/spacewind/spacewind/sheep_v2/backend/main.py># imports section
+# imports section
 # ---------------- Core ----------------
 import os
 import datetime
@@ -208,4 +208,4 @@ app.include_router(api_router, prefix="/api")
 from fastapi.staticfiles import StaticFiles
 
 frontend_path = Path(__file__).parent.parent / "frontend"
-app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
