@@ -8,7 +8,7 @@ import chromadb
 from pathlib import Path
 
 # FastAPI & Server
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
+from fastapi import FastAPI, APIRouter, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -112,7 +112,10 @@ def extract_text(file_path: str, filename: str) -> str:
 
 from fastapi import BackgroundTasks
 
-@app.post("/upload/")
+# API router
+api_router = APIRouter()
+
+@api_router.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
     # Save uploaded file temporarily
     temp_file_path = f"temp_{int(time.time())}_{file.filename}"
@@ -175,7 +178,7 @@ def periodic_cleanup():
 
 # content finding from database
 
-@app.post("/query/")
+@api_router.post("/query/")
 async def query_documents(question: str):
     # Step 1: Search in ChromaDB
     results = collection.query(query_texts=[question], n_results=3, include=["documents"])
@@ -198,6 +201,8 @@ async def query_documents(question: str):
         "context": context
     })
 
+
+app.include_router(api_router, prefix="/api")
 
 # Serve frontend (index.html, script.js, style.css)
 from fastapi.staticfiles import StaticFiles
