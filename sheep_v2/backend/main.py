@@ -5,6 +5,7 @@ import datetime
 from typing import List, Optional
 import time
 import chromadb
+from pathlib import Path
 
 # FastAPI & Server
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
@@ -27,16 +28,21 @@ from dotenv import load_dotenv
 from fastapi_utils.tasks import repeat_every
 
 
-
-
-
 # api setup area
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust as needed for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 genai.configure(api_key="AIzaSyA20oTijrHh6sip6JWxdvke0ZvrVG02HsA")
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection("documents")
-
 
 
 # documents upload area
@@ -104,7 +110,6 @@ def extract_text(file_path: str, filename: str) -> str:
         raise ValueError(f"Unsupported file type: .{ext}")
 
 
-
 from fastapi import BackgroundTasks
 
 @app.post("/upload/")
@@ -165,12 +170,7 @@ def periodic_cleanup():
     cleanup_old_docs()
 
 
-
-
 # user input
-
-
-
 
 
 # content finding from database
@@ -199,19 +199,8 @@ async def query_documents(question: str):
     })
 
 
-
-
-
-
-
-
-
-
-
-
-
 # Serve frontend (index.html, script.js, style.css)
 from fastapi.staticfiles import StaticFiles
 
-# Serve frontend (index.html, script.js, style.css)
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
+frontend_path = Path(__file__).parent.parent / "frontend"
+app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
