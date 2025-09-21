@@ -200,4 +200,18 @@ async def query_documents(question: str):
 
 
 
-# response
+
+
+
+
+
+
+
+
+
+
+# Serve frontend (index.html, script.js, style.css)
+from fastapi.staticfiles import StaticFiles
+
+# Serve frontend (index.html, script.js, style.css)
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
