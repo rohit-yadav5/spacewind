@@ -1,6 +1,6 @@
 const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://127.0.0.1:8000"
-  : "https://sheep.spacewind.xyz";
+  ? "http://127.0.0.1:8000/api"
+  : "https://sheep.spacewind.xyz/api";
 
 async function uploadFile() {
     const fileInput = document.getElementById("fileInput");
@@ -45,8 +45,7 @@ async function askQuestion() {
     // Fetch bot answer
     try {
         const res = await fetch(`${API_BASE}/query/?question=${encodeURIComponent(question)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
+            method: "POST"
         });
         const data = await res.json();
         const botMsg = document.createElement("div");
