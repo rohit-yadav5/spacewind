@@ -1,4 +1,5 @@
 const API_BASE = window.location.origin + "/api"; // works both locally and online
+const fileListDiv = document.getElementById("fileList");
 
 async function uploadFile() {
     const fileInput = document.getElementById("fileInput");
@@ -55,4 +56,31 @@ async function askQuestion() {
     }
 
     chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+async function listFiles() {
+    if (!fileListDiv) return;
+    try {
+        const res = await fetch(`${API_BASE}/files/`);
+        const files = await res.json();
+        fileListDiv.innerHTML = "";
+        if (!files.length) {
+            fileListDiv.textContent = "No files uploaded.";
+            return;
+        }
+        files.forEach(file => {
+            const div = document.createElement("div");
+            div.className = "file-item";
+            div.innerHTML = `
+                <strong>${file.filename}</strong> 
+                <em>(uploaded ${new Date(file.upload_time).toLocaleString()})</em><br>
+                Chunks: ${file.num_chunks}<br>
+                Preview: ${file.preview}
+            `;
+            fileListDiv.appendChild(div);
+        });
+    } catch (err) {
+        console.error(err);
+        fileListDiv.textContent = "Error fetching files.";
+    }
 }

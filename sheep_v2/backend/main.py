@@ -152,7 +152,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 def cleanup_old_docs():
     now = int(time.time())
-    cutoff = now - 48 * 3600  # 48 hours ago
+    cutoff = now - 6 * 3600  # 6 hours ago
 
     # Get all documents
     all_docs = collection.get(include=["ids", "metadatas"])
@@ -200,6 +200,34 @@ async def query_documents(question: str):
         "answer": response.text,
         "context": context
     })
+
+
+# New endpoint: List uploaded files and their metadata
+@api_router.get("/files/")
+async def list_uploaded_files():
+    """Return all uploaded files and their metadata"""
+    all_docs = collection.get(include=["ids", "metadatas", "documents"])
+
+    files_summary = {}
+    for doc_id, metadata, document in zip(
+        all_docs["ids"], all_docs["metadatas"], all_docs["documents"]
+    ):
+        filename = metadata.get("filename", "unknown")
+        uploaded_at = metadata.get("uploaded_at", 0)
+        uploaded_time = datetime.datetime.fromtimestamp(uploaded_at).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+        if filename not in files_summary:
+            files_summary[filename] = {
+                "uploaded_at": uploaded_time,
+                "chunks": 0,
+                "sample_content": document[:200]  # preview first 200 chars
+            }
+
+        files_summary[filename]["chunks"] += 1
+
+    return JSONResponse(content={"files": files_summary})
 
 
 app.include_router(api_router, prefix="/api")
