@@ -38,12 +38,7 @@
       fileList.innerHTML = '';
       for (const [filename, info] of Object.entries(data.files || {})) {
         const fileDiv = document.createElement('div');
-        const link = document.createElement('a');
-        link.href = `/${filename}`;
-        link.textContent = filename;
-        link.target = '_blank';
-        link.download = filename;
-        fileDiv.appendChild(link);
+        fileDiv.textContent = filename;
         fileList.appendChild(fileDiv);
       }
     }
