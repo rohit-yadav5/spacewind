@@ -39,7 +39,7 @@
       for (const [filename, info] of Object.entries(data.files || {})) {
         const fileDiv = document.createElement('div');
         const link = document.createElement('a');
-        link.href = `/uploads/${filename}`;
+        link.href = `/${filename}`;
         link.textContent = filename;
         link.target = '_blank';
         link.download = filename;
