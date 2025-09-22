@@ -80,7 +80,6 @@ async function listFiles() {
                 <em>(uploaded ${new Date(info.uploaded_at).toLocaleString()})</em><br>
                 Chunks: ${info.chunks}<br>
                 Preview: ${info.sample_content || 'N/A'}<br>
-                <a href="${API_BASE}/download/${encodeURIComponent(filename)}" target="_blank">Download</a>
             `;
             fileListDiv.appendChild(div);
         }
