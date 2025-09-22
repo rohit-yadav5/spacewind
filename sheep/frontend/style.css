@@ -104,3 +104,56 @@ button {
 button:hover {
   background: #0056b3;
 }
+
+
+/* Uploaded files section */
+#fileSection {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+#fileSection h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #007bff;
+  text-align: center;
+}
+
+#fileList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#fileList li {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#fileList li span {
+  color: #555;
+}
+
+#fileList li button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#fileList li button:hover {
+  background: #a71d2a;
+}
