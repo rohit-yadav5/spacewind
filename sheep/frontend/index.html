@@ -28,6 +28,29 @@
     </div>
   </div>
 
+  <script>
+    // Wrap file list updating to ensure clickable/downloadable links
+    async function refreshFileList() {
+      const res = await fetch('/api/files/');
+      if (!res.ok) return;
+      const data = await res.json();
+      const fileList = document.getElementById('fileList');
+      fileList.innerHTML = '';
+      for (const [filename, info] of Object.entries(data.files || {})) {
+        const fileDiv = document.createElement('div');
+        const link = document.createElement('a');
+        link.href = `/uploads/${filename}`;
+        link.textContent = filename;
+        link.target = '_blank';
+        link.download = filename;
+        fileDiv.appendChild(link);
+        fileList.appendChild(fileDiv);
+      }
+    }
+
+    // Initial refresh on page load
+    window.addEventListener('DOMContentLoaded', refreshFileList);
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
