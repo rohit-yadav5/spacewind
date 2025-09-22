@@ -19,6 +19,7 @@ async function uploadFile() {
         });
         const data = await res.json();
         uploadMsg.textContent = res.ok ? data.message : (data.detail || "Upload failed.");
+        if (res.ok) listFiles(); // Refresh file list after upload
     } catch (err) {
         console.error(err);
         uploadMsg.textContent = "Error uploading file.";
@@ -31,7 +32,6 @@ async function askQuestion() {
     const question = questionInput.value.trim();
     if (!question) return;
 
-    // Append user message
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.textContent = question;
@@ -74,9 +74,9 @@ async function listFiles() {
             div.className = "file-item";
             div.innerHTML = `
                 <strong>${filename}</strong> 
-                <em>(uploaded ${info.uploaded_at})</em><br>
+                <em>(uploaded ${new Date(info.uploaded_at).toLocaleString()})</em><br>
                 Chunks: ${info.chunks}<br>
-                Preview: ${info.sample_content}
+                Preview: ${info.sample_content || 'N/A'}
             `;
             fileListDiv.appendChild(div);
         }
@@ -85,3 +85,6 @@ async function listFiles() {
         fileListDiv.textContent = "Error fetching files.";
     }
 }
+
+// Call listFiles on page load
+window.addEventListener("DOMContentLoaded", listFiles);
