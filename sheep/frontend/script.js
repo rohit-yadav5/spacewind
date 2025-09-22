@@ -62,23 +62,24 @@ async function listFiles() {
     if (!fileListDiv) return;
     try {
         const res = await fetch(`${API_BASE}/files/`);
-        const files = await res.json();
+        const data = await res.json();
+        const files = data.files || {};
         fileListDiv.innerHTML = "";
-        if (!files.length) {
+        if (!Object.keys(files).length) {
             fileListDiv.textContent = "No files uploaded.";
             return;
         }
-        files.forEach(file => {
+        for (const [filename, info] of Object.entries(files)) {
             const div = document.createElement("div");
             div.className = "file-item";
             div.innerHTML = `
-                <strong>${file.filename}</strong> 
-                <em>(uploaded ${new Date(file.upload_time).toLocaleString()})</em><br>
-                Chunks: ${file.num_chunks}<br>
-                Preview: ${file.preview}
+                <strong>${filename}</strong> 
+                <em>(uploaded ${info.uploaded_at})</em><br>
+                Chunks: ${info.chunks}<br>
+                Preview: ${info.sample_content}
             `;
             fileListDiv.appendChild(div);
-        });
+        }
     } catch (err) {
         console.error(err);
         fileListDiv.textContent = "Error fetching files.";

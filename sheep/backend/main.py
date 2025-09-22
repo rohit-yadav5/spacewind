@@ -206,11 +206,11 @@ async def query_documents(question: str):
 @api_router.get("/files/")
 async def list_uploaded_files():
     """Return all uploaded files and their metadata"""
-    all_docs = collection.get(include=["ids", "metadatas", "documents"])
+    all_docs = collection.get(include=["metadatas", "documents"])
 
     files_summary = {}
-    for doc_id, metadata, document in zip(
-        all_docs["ids"], all_docs["metadatas"], all_docs["documents"]
+    for metadata, document, doc_id in zip(
+        all_docs["metadatas"], all_docs["documents"], all_docs["ids"]
     ):
         filename = metadata.get("filename", "unknown")
         uploaded_at = metadata.get("uploaded_at", 0)
