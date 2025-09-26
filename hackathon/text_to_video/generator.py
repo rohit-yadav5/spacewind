@@ -32,16 +32,21 @@ def generate_video_from_text(text: str, duration_per_char: float = 0.5) -> dict:
         logging.warning("⚠️ No valid characters found in input.")
         return {"video_path": "", "processed_chars": []}
 
-    # Validate if all sign images exist
+    # Validate if all sign images exist, checking for .png or .jpg
     sign_images = []
     processed_chars = []
     for ch in chars:
-        image_path = os.path.join(signs_dir, f"{ch}.png")
-        if not os.path.exists(image_path):
+        image_path_png = os.path.join(signs_dir, f"{ch}.png")
+        image_path_jpg = os.path.join(signs_dir, f"{ch}.jpg")
+        if os.path.exists(image_path_png):
+            sign_images.append(image_path_png)
+            processed_chars.append(ch)
+        elif os.path.exists(image_path_jpg):
+            sign_images.append(image_path_jpg)
+            processed_chars.append(ch)
+        else:
             logging.error(f"❌ Error: No image found for character '{ch}' in {signs_dir}")
             raise FileNotFoundError(f"No image found for character '{ch}' in {signs_dir}")
-        sign_images.append(image_path)
-        processed_chars.append(ch)
 
     # Read all images and collect them resized to the first image's size
     images = []
