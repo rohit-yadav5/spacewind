@@ -2,6 +2,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.insert(0, project_root)
 
 from text_to_video.generator import generate_video_from_text
 
@@ -20,13 +25,11 @@ def generate_video(request: TextRequest):
     Generate a sign-language video for the given text.
     """
     try:
-        # Call the generate_video_from_text function directly
         generate_video_from_text(request.text)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Video generation failed: {str(e)}")
 
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    video_dir = os.path.abspath(os.path.join(current_dir, "..", "text_to_video", "outputs"))
+    video_dir = os.path.join(project_root, "text_to_video", "outputs")
     if not os.path.exists(video_dir):
         raise HTTPException(status_code=500, detail="Video output directory does not exist.")
 
