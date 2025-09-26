@@ -24,20 +24,17 @@ def generate_video(request: TextRequest):
     Generate a sign-language video for the given text.
     """
     try:
-        generate_video_from_text(request.text)
+        result = generate_video_from_text(request.text)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Video generation failed: {str(e)}")
 
-    if not os.path.exists(outputs_dir):
-        raise HTTPException(status_code=500, detail="Video output directory does not exist.")
+    video_path = result.get("video_path")
+    processed_chars = result.get("processed_chars")
 
-    videos = [f for f in os.listdir(outputs_dir) if f.startswith("output") and f.endswith(".mp4")]
-    if not videos:
-        raise HTTPException(status_code=500, detail="No video was generated.")
+    if not video_path or not os.path.exists(video_path):
+        raise HTTPException(status_code=500, detail="No video was generated or video file not found.")
 
-    videos.sort(key=lambda x: os.path.getmtime(os.path.join(outputs_dir, x)), reverse=True)
-    latest_video = os.path.join(outputs_dir, videos[0])
-    return FileResponse(latest_video, media_type="video/mp4", filename=videos[0])
+    return FileResponse(video_path, media_type="video/mp4", filename=os.path.basename(video_path))
 
 if __name__ == "__main__":
     import uvicorn
