@@ -5,8 +5,7 @@ import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir, ".."))
-sys.path.insert(0, project_root)
+sys.path.insert(0, current_dir)
 
 from text_to_video.generator import generate_video_from_text
 
@@ -29,7 +28,7 @@ def generate_video(request: TextRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Video generation failed: {str(e)}")
 
-    video_dir = os.path.join(project_root, "text_to_video", "outputs")
+    video_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "text_to_video", "outputs")
     if not os.path.exists(video_dir):
         raise HTTPException(status_code=500, detail="Video output directory does not exist.")
 

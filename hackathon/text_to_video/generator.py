@@ -6,11 +6,10 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
-# Path to folder containing collected sign images
-signs_dir = "signs"
-
-# Ensure 'outputs' directory exists
-outputs_dir = "outputs"
+# Set absolute paths for 'signs' and 'outputs' directories relative to this script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+signs_dir = os.path.join(SCRIPT_DIR, "signs")
+outputs_dir = os.path.join(SCRIPT_DIR, "outputs")
 os.makedirs(outputs_dir, exist_ok=True)
 
 def generate_video_from_text(text: str, duration_per_word: int = 2) -> dict:
