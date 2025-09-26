@@ -36,7 +36,7 @@ def generate_video_from_text(text: str, duration_per_char: float = 0.5) -> dict:
     sign_images = []
     processed_chars = []
     for ch in chars:
-        image_path = os.path.join(signs_dir, f"{ch}.jpg")
+        image_path = os.path.join(signs_dir, f"{ch}.png")
         if not os.path.exists(image_path):
             logging.error(f"❌ Error: No image found for character '{ch}' in {signs_dir}")
             raise FileNotFoundError(f"No image found for character '{ch}' in {signs_dir}")
