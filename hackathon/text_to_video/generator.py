@@ -1,16 +1,19 @@
 import cv2
 import os
 import re
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 # Path to folder containing collected sign images
 signs_dir = "signs"
-
 
 # Ensure 'outputs' directory exists
 outputs_dir = "outputs"
 os.makedirs(outputs_dir, exist_ok=True)
 
-def generate_video_from_text(text: str) -> str:
+def generate_video_from_text(text: str, duration_per_word: int = 2) -> dict:
     # Find the highest existing output file number in outputs directory
     output_pattern = re.compile(r'output(\d+)\.mp4')
     existing_numbers = []
@@ -25,41 +28,45 @@ def generate_video_from_text(text: str) -> str:
 
     words = text.strip().lower().split()
 
+    if not words:
+        logging.warning("⚠️ No valid words found in input.")
+        return {"video_path": "", "processed_words": []}
+
     # Validate if all images exist
     images = []
+    processed_words = []
     for word in words:
         img_path = os.path.join(signs_dir, f"{word}.jpg")
         if not os.path.exists(img_path):
-            print(f"❌ Error: No image found for word '{word}' in {signs_dir}")
-            return ""
+            logging.error(f"❌ Error: No image found for word '{word}' in {signs_dir}")
+            raise FileNotFoundError(f"No image found for word '{word}' in {signs_dir}")
         images.append(img_path)
-
-    if not images:
-        print("⚠️ No valid words found in input.")
-        return ""
+        processed_words.append(word)
 
     # Load first image to get dimensions
     frame = cv2.imread(images[0])
     if frame is None:
-        print("❌ Error: Could not read the first image.")
-        return ""
+        logging.error("❌ Error: Could not read the first image.")
+        raise IOError("Could not read the first image.")
 
     height, width, layers = frame.shape
     size = (width, height)
 
     # Define video writer (30 frames per second, slideshow style)
-    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
+    fps = 30
+    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
 
-    # Write each image multiple times to simulate video duration (2 seconds per image)
+    # Write each image multiple times to simulate video duration
+    frames_per_image = int(fps * duration_per_word)
     for img_path in images:
         img = cv2.imread(img_path)
         if img is None:
-            print(f"⚠️ Skipping unreadable image: {img_path}")
+            logging.warning(f"⚠️ Skipping unreadable image: {img_path}")
             continue
         resized = cv2.resize(img, size)
-        for _ in range(60):  # show each image for ~2 seconds (60 frames at 30fps)
+        for _ in range(frames_per_image):
             out.write(resized)
 
     out.release()
-    print(f"✅ Video generated: {output_file}")
-    return output_file
+    logging.info(f"✅ Video generated: {output_file}")
+    return {"video_path": output_file, "processed_words": processed_words}
