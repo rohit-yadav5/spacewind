@@ -5,3 +5,5 @@ backend/wordtopdf/__pycache__/
 backend/wordtopdf/uploads/
 .DS_Store
 venv/
+hackathon/venv/
+hackathon/text_to_video/

@@ -5,17 +5,22 @@ import re
 # Path to folder containing collected sign images
 signs_dir = "signs"
 
-# Find the highest existing output file number
+
+# Ensure 'outputs' directory exists
+outputs_dir = "outputs"
+os.makedirs(outputs_dir, exist_ok=True)
+
+# Find the highest existing output file number in outputs directory
 output_pattern = re.compile(r'output(\d+)\.mp4')
 existing_numbers = []
-for filename in os.listdir('.'):
+for filename in os.listdir(outputs_dir):
     match = output_pattern.match(filename)
     if match:
         existing_numbers.append(int(match.group(1)))
 next_number = max(existing_numbers) + 1 if existing_numbers else 1
 
-# Output video file with incremental numbering
-output_file = f"output{next_number}.mp4"
+# Output video file with incremental numbering inside outputs directory
+output_file = os.path.join(outputs_dir, f"output{next_number}.mp4")
 
 # Get input text
 text = input("Enter a sentence to convert into sign video: ").strip().lower()
