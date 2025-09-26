@@ -7,5 +7,3 @@ backend/wordtopdf/uploads/
 venv/
 hackathon/venv/
 hackathon/text_to_video/outputs
-hackathon/text_to_video/signs
-hackathon/
