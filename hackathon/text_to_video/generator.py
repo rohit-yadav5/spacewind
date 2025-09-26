@@ -13,7 +13,7 @@ signs_dir = os.path.join(SCRIPT_DIR, "signs")
 outputs_dir = os.path.join(SCRIPT_DIR, "outputs")
 os.makedirs(outputs_dir, exist_ok=True)
 
-def generate_video_from_text(text: str, duration_per_char: int = 2) -> dict:
+def generate_video_from_text(text: str, duration_per_char: float = 0.5) -> dict:
     # Find the highest existing output file number in outputs directory
     output_pattern = re.compile(r'output(\d+)\.mp4')
     existing_numbers = []
@@ -65,7 +65,7 @@ def generate_video_from_text(text: str, duration_per_char: int = 2) -> dict:
 
     # Define video properties
     fps = 30  # frames per second
-    frames_per_image = duration_per_char * fps
+    frames_per_image = int(duration_per_char * fps)
 
     # Prepare frames for video
     frames = []
