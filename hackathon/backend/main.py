@@ -30,7 +30,7 @@ def generate_video(text: str):
         return {"error": process.stderr}
 
     # Since generator saves output as outputN.mp4, find the latest file
-    video_dir = os.path.join(os.path.dirname(__file__), "../text_to_video")
+    video_dir = os.path.join(os.path.dirname(__file__), "../text_to_video/outputs")
     videos = [f for f in os.listdir(video_dir) if f.startswith("output") and f.endswith(".mp4")]
     videos.sort(key=lambda x: os.path.getmtime(os.path.join(video_dir, x)), reverse=True)
 
