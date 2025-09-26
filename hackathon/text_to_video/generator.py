@@ -2,6 +2,7 @@ import cv2
 import os
 import re
 import logging
+import numpy as np
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -31,41 +32,100 @@ def generate_video_from_text(text: str, duration_per_word: int = 2) -> dict:
         logging.warning("⚠️ No valid words found in input.")
         return {"video_path": "", "processed_words": []}
 
-    # Validate if all images exist
-    images = []
+    # Validate if all sign videos exist
+    sign_videos = []
     processed_words = []
     for word in words:
-        img_path = os.path.join(signs_dir, f"{word}.jpg")
-        if not os.path.exists(img_path):
-            logging.error(f"❌ Error: No image found for word '{word}' in {signs_dir}")
-            raise FileNotFoundError(f"No image found for word '{word}' in {signs_dir}")
-        images.append(img_path)
+        video_path = os.path.join(signs_dir, f"{word}.mp4")
+        if not os.path.exists(video_path):
+            logging.error(f"❌ Error: No video found for word '{word}' in {signs_dir}")
+            raise FileNotFoundError(f"No video found for word '{word}' in {signs_dir}")
+        sign_videos.append(video_path)
         processed_words.append(word)
 
-    # Load first image to get dimensions
-    frame = cv2.imread(images[0])
-    if frame is None:
-        logging.error("❌ Error: Could not read the first image.")
-        raise IOError("Could not read the first image.")
+    # Read all videos and collect frames resized to first video's size
+    frames = []
+    fps = None
+    width = None
+    height = None
 
-    height, width, layers = frame.shape
-    size = (width, height)
+    for video_path in sign_videos:
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            logging.error(f"❌ Error: Could not open video file {video_path}")
+            raise IOError(f"Could not open video file {video_path}")
 
-    # Define video writer (30 frames per second, slideshow style)
-    fps = 30
-    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
+        # Get video properties
+        video_fps = cap.get(cv2.CAP_PROP_FPS)
+        video_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        video_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    # Write each image multiple times to simulate video duration
-    frames_per_image = int(fps * duration_per_word)
-    for img_path in images:
-        img = cv2.imread(img_path)
-        if img is None:
-            logging.warning(f"⚠️ Skipping unreadable image: {img_path}")
-            continue
-        resized = cv2.resize(img, size)
-        for _ in range(frames_per_image):
-            out.write(resized)
+        if fps is None:
+            fps = video_fps
+        else:
+            if abs(fps - video_fps) > 0.01:
+                logging.warning(f"⚠️ FPS mismatch: expected {fps}, got {video_fps} in {video_path}")
+
+        if width is None or height is None:
+            width, height = video_width, video_height
+        else:
+            if width != video_width or height != video_height:
+                logging.warning(f"⚠️ Resolution mismatch: expected {width}x{height}, got {video_width}x{video_height} in {video_path}")
+
+        # Calculate number of frames to extract for duration_per_word seconds
+        frames_needed = int(fps * duration_per_word)
+
+        # Read frames from video
+        video_frames = []
+        frame_count = 0
+        while frame_count < frames_needed:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            # Resize frame if needed
+            if frame.shape[1] != width or frame.shape[0] != height:
+                frame = cv2.resize(frame, (width, height))
+            video_frames.append(frame)
+            frame_count += 1
+
+        # If video has fewer frames than needed, repeat last frame
+        if len(video_frames) < frames_needed:
+            if video_frames:
+                last_frame = video_frames[-1]
+                while len(video_frames) < frames_needed:
+                    video_frames.append(last_frame)
+            else:
+                logging.warning(f"⚠️ Video {video_path} has no frames, skipping.")
+                cap.release()
+                continue
+
+        frames.extend(video_frames)
+        cap.release()
+
+    if not frames:
+        logging.error("❌ Error: No frames to write to output video.")
+        return {"video_path": "", "processed_words": processed_words}
+
+    # Define video writer
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
+
+    for frame in frames:
+        out.write(frame)
 
     out.release()
     logging.info(f"✅ Video generated: {output_file}")
     return {"video_path": output_file, "processed_words": processed_words}
+
+
+
+
+if __name__ == "__main__":
+    # Example test text
+    text = input("Enter text to generate sign video: ").strip()
+    try:
+        result = generate_video_from_text(text)
+        print("Processed words:", result["processed_words"])
+        print("Video saved at:", result["video_path"])
+    except Exception as e:
+        print("Error:", e)
