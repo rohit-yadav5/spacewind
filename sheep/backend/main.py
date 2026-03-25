@@ -23,10 +23,10 @@ import pytesseract            # OCR for images
 import openpyxl               # Read Excel files
 
 # ---------------- Database & Utilities ----------------
-from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 from fastapi_utils.tasks import repeat_every
 
+load_dotenv()
 
 # api setup area
 app = FastAPI()
@@ -40,7 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-genai.configure(api_key="AIzaSyA20oTijrHh6sip6JWxdvke0ZvrVG02HsA")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection("documents")
 
@@ -126,26 +126,28 @@ async def upload_file(file: UploadFile = File(...)):
     try:
         # Extract text from file
         text = extract_text(temp_file_path, file.filename)
-    except Exception as e:
-        os.remove(temp_file_path)
+
+        # Split text into 500-character chunks
+        chunks = [text[i:i+500] for i in range(0, len(text), 500)]
+
+        # Current timestamp
+        uploaded_at = int(time.time())
+
+        # Add each chunk to chroma collection
+        for idx, chunk in enumerate(chunks):
+            collection.add(
+                documents=[chunk],
+                metadatas=[{"filename": file.filename, "uploaded_at": uploaded_at}],
+                ids=[f"{file.filename}_{uploaded_at}_{idx}"]
+            )
+    except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-    # Split text into 500-character chunks
-    chunks = [text[i:i+500] for i in range(0, len(text), 500)]
-
-    # Current timestamp
-    uploaded_at = int(time.time())
-
-    # Add each chunk to chroma collection
-    for idx, chunk in enumerate(chunks):
-        collection.add(
-            documents=[chunk],
-            metadatas=[{"filename": file.filename, "uploaded_at": uploaded_at}],
-            ids=[f"{file.filename}_{uploaded_at}_{idx}"]
-        )
-
-    # Delete temp file
-    os.remove(temp_file_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        # Always remove the temp file, regardless of success or failure
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
 
     return JSONResponse(content={"message": f"Stored {len(chunks)} chunks from {file.filename}."})
 
@@ -154,8 +156,8 @@ def cleanup_old_docs():
     now = int(time.time())
     cutoff = now - 6 * 3600  # 6 hours ago
 
-    # Get all documents
-    all_docs = collection.get(include=["ids", "metadatas"])
+    # Get all documents (ids are always returned; only metadatas needed here)
+    all_docs = collection.get(include=["metadatas"])
 
     ids_to_delete = []
     for doc_id, metadata in zip(all_docs["ids"], all_docs["metadatas"]):

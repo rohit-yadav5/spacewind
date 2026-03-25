@@ -91,7 +91,9 @@ if RUN_PORTFOLIO:
         print(f"\n✅ Portfolio feature: ENABLED (Serving {portfolio_path} on port 5005)")
         subprocess.Popen(
             ["python3", "-m", "http.server", "5505"],
-            cwd=portfolio_path
+            cwd=portfolio_path,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
     else:
         print(f"\n⚠ Portfolio folder not found: {portfolio_path}")

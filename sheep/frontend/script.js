@@ -76,8 +76,8 @@ async function listFiles() {
             const div = document.createElement('div');
             div.className = 'file-item';
             div.innerHTML = `
-                <strong>${filename}</strong> 
-                <em>(uploaded ${new Date(info.uploaded_at).toLocaleString()})</em><br>
+                <strong>${filename}</strong>
+                <em>(uploaded ${info.uploaded_at})</em><br>
                 Chunks: ${info.chunks}<br>
                 Preview: ${info.sample_content || 'N/A'}<br>
             `;
