@@ -1,31 +1,78 @@
 # Spacewind
 
-**Spacewind** is a self-hosted AI and Generative AI studio, accessible at [spacewind.xyz](http://spacewind.xyz). The site is served directly from an Ubuntu laptop and acts as both a personal portfolio and an active playground for AI/GenAI experiments.
+Self-hosted AI and GenAI studio at [spacewind.xyz](http://spacewind.xyz) — built backend-first on **FastAPI**, with a RAG pipeline, document processing APIs, and a GitHub CI webhook, all served from an Ubuntu laptop.
 
 ---
 
-## Table of Contents
+## Backend Architecture
 
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Setup & Running](#setup--running)
-- [Environment Variables](#environment-variables)
-- [Feature Flags](#feature-flags)
-- [API Reference](#api-reference)
-- [Notes](#notes)
+The core is a single FastAPI app (`main.py`) that conditionally mounts routers and static directories based on feature flags. Each sub-feature lives in its own module with its own router, keeping the entry point clean.
 
----
+```
+main.py                          ← FastAPI app, feature flags, subprocess management
+main_sapacewind/backend/
+  webhook/handler.py             ← POST /webhook  (GitHub push → git pull)
+  wordtopdf/converter.py         ← POST /convert  (DOCX → PDF via LibreOffice)
+  github_auto_puller.py          ← git pull helper used by both webhook routes
+sheep/backend/main.py            ← Standalone FastAPI app: RAG pipeline + document APIs
+```
 
-## Overview
+### RAG Pipeline (SheepBot)
 
-Spacewind combines day-to-day tooling needs with hands-on experimentation in web development, AI, and self-hosting. The tagline sums it up: **"Ideas at escape velocity."**
+`sheep/backend/main.py` implements a full Retrieval-Augmented Generation loop:
 
-Key goals:
-- Ship real, working AI tools — not just demos
-- Self-host everything to retain full control and learn infrastructure deeply
-- Prototype quickly, iterate relentlessly
+1. **Ingest** — `POST /api/upload/` accepts PDF, DOCX, TXT, JPG/PNG, XLSX. Text is extracted per format, chunked at 500 characters, and stored in ChromaDB with a Unix timestamp.
+2. **Retrieve** — `POST /api/query/` embeds the question, queries ChromaDB for the top-3 relevant chunks, and builds a context string.
+3. **Generate** — context + question are sent to **Gemini 1.5 Flash**; the answer is streamed back as JSON.
+4. **Expire** — a background task runs every hour and deletes any document chunks older than 6 hours.
+
+### Document Processing
+
+Each file type has a dedicated extractor:
+
+| Format | Library |
+|---|---|
+| PDF | pdfplumber |
+| DOCX | python-docx |
+| TXT | stdlib |
+| JPG / PNG | Pillow + pytesseract (OCR) |
+| XLS / XLSX | openpyxl |
+
+### Word-to-PDF Converter
+
+`POST /convert` saves the upload to a UUID-named temp file, shells out to `libreoffice --headless --convert-to pdf`, then serves the result from the `/converted` static mount. The UUID filename prevents collisions and avoids exposing the original filename in the download URL.
+
+### GitHub Webhook / Auto-Puller
+
+`POST /webhook` validates the `ref` against `refs/heads/main`, then runs `git pull` in the repo directory via `subprocess`. A fallback route `POST /webhook-direct` calls the same puller directly, bypassing the webhook handler class.
+
+### Feature Flags
+
+Three booleans at the top of `main.py` control which modules load at startup — no config files needed:
+
+```python
+RUN_WORDTOPDF = True   # mounts /convert router + /converted static dir
+RUN_FRONTEND  = True   # serves frontend static files + registers /webhook
+RUN_PORTFOLIO = True   # spawns portfolio HTTP server on port 5505
+```
+
+### API Reference
+
+**Main app**
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/convert` | Upload `.docx`, returns PDF download link |
+| `POST` | `/webhook` | GitHub push handler — pulls main branch |
+| `POST` | `/webhook-direct` | Fallback direct pull |
+
+**SheepBot** (`sheep/backend/main.py`)
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/api/upload/` | Ingest a document into ChromaDB |
+| `POST` | `/api/query/?question=...` | RAG query against stored documents |
+| `GET`  | `/api/files/` | List documents with chunk count and preview |
 
 ---
 
@@ -33,89 +80,33 @@ Key goals:
 
 ```
 spacewind/
-├── main.py                          # Main FastAPI entry point (feature flags live here)
-├── requirements.txt                 # Python dependencies
-├── .env.example                     # Environment variable template
-├── .gitignore
+├── main.py
+├── requirements.txt
+├── .env.example
 │
-├── main_sapacewind/                 # Primary website
+├── main_sapacewind/
 │   ├── backend/
-│   │   ├── github_auto_puller.py   # Git auto-pull helper
-│   │   ├── webhook/
-│   │   │   └── handler.py          # GitHub webhook endpoint (/webhook)
-│   │   └── wordtopdf/
-│   │       └── converter.py        # DOCX → PDF converter (/convert)
+│   │   ├── github_auto_puller.py
+│   │   ├── webhook/handler.py
+│   │   └── wordtopdf/converter.py
 │   ├── frontend/                    # Static site (HTML/CSS/JS)
-│   │   ├── index.html
-│   │   ├── projects.html
-│   │   ├── contact.html
-│   │   ├── privacy.html
-│   │   ├── terms.html
-│   │   ├── cookies.html
-│   │   ├── mini_projects.html
-│   │   ├── css/styles.css
-│   │   ├── js/script.js
-│   │   └── assets/
-│   └── mini_projects/              # Mounted at /mini_projects
+│   └── mini_projects/
 │
-├── sheep/                           # SheepBot — document Q&A chatbot
-│   ├── backend/main.py             # FastAPI app with Gemini RAG pipeline
-│   ├── frontend/                    # Chatbot UI (HTML/CSS/JS)
+├── sheep/
+│   ├── backend/main.py             # RAG pipeline + document APIs
+│   ├── frontend/                    # Chatbot UI
 │   └── chroma_db/                  # ChromaDB persistent storage
 │
 ├── hackathon/                       # Sign language video generator
 │   ├── backend/main.py
-│   ├── frontend/
-│   └── text_to_video/
-│       ├── collector.py            # Record webcam sign videos
-│       └── generator.py            # Generate video from text
+│   ├── text_to_video/
+│   │   ├── collector.py            # Record webcam sign clips
+│   │   └── generator.py            # Sequence clips into video from text
 │   └── video_to_text/
-│       └── recorder.py             # Hand detection + classification
+│       └── recorder.py             # HSV-based hand detection
 │
-└── rohit/                           # Personal portfolio (served on port 5505)
-    ├── index.html
-    ├── about.html
-    ├── projects.html
-    ├── contact.html
-    └── style.css
+└── rohit/                           # Portfolio (port 5505)
 ```
-
----
-
-## Features
-
-### Main Website (`main_sapacewind/`)
-- Dark-themed marketing site with glassmorphism design and scroll animations
-- Hero section, project showcase, and contact forms (via Web3Forms)
-- Browser speech synthesis demo — no data leaves the device
-- Responsive layout across desktop and mobile
-
-### SheepBot — Document Chatbot (`sheep/`)
-- Upload PDF, DOCX, TXT, JPG/PNG, or XLSX files
-- Text extraction via `pdfplumber`, `python-docx`, `pytesseract` (OCR), and `openpyxl`
-- Documents are chunked (500 chars) and stored in ChromaDB as vector embeddings
-- RAG pipeline: retrieves relevant chunks → sends to Google Gemini 1.5 Flash → returns answer
-- Auto-cleanup: documents older than 6 hours are purged hourly
-- File listing endpoint with metadata and content previews
-
-### Word-to-PDF Converter
-- `POST /convert` accepts a `.docx` upload
-- Converts using LibreOffice headless mode
-- Returns a download link: `https://spacewind.xyz/converted/{file_id}.pdf`
-
-### GitHub Auto-Puller
-- `POST /webhook` listens for GitHub push events
-- Pulls latest changes automatically when a push to `main` is detected
-- `POST /webhook-direct` available as a fallback
-
-### Portfolio
-- Personal portfolio served on port `5505` via Python's built-in HTTP server
-- Spawned as a subprocess when `RUN_PORTFOLIO = True`
-
-### Sign Language Video Generator (Hackathon project)
-- **Collector**: Records 2-second webcam clips per sign for a training dataset
-- **Generator**: Sequences stored sign clips into a video from input text
-- **Recognizer**: Real-time hand detection using HSV color space and contour analysis
 
 ---
 
@@ -124,26 +115,26 @@ spacewind/
 | Layer | Technology |
 |---|---|
 | Backend framework | FastAPI + Uvicorn |
-| AI / LLM | Google Gemini 1.5 Flash (`google-generativeai`) |
+| AI / LLM | Google Gemini 1.5 Flash |
 | Vector DB | ChromaDB (persistent) |
 | Document parsing | pdfplumber, python-docx, pytesseract, openpyxl, Pillow |
-| PDF conversion | LibreOffice (headless) |
-| Frontend | Vanilla HTML5, CSS3 (CSS variables, Grid, Flexbox), ES6 JS |
-| OS / Hosting | Ubuntu, self-hosted, custom domain via DNS |
-| Vision (hackathon) | OpenCV, NumPy |
+| PDF conversion | LibreOffice headless |
+| Frontend | HTML5, CSS3, Vanilla JS |
+| Hosting | Ubuntu laptop, self-hosted, custom domain |
+| Vision | OpenCV, NumPy |
 
 ---
 
-## Setup & Running
+## Setup
 
 ### Prerequisites
 
 - Python 3.9+
-- LibreOffice (for the Word-to-PDF converter)
-- Tesseract OCR (for image text extraction in SheepBot)
+- LibreOffice (`libreoffice` on PATH)
+- Tesseract OCR (`tesseract` on PATH)
 - A Google Gemini API key
 
-### Install
+### Install & configure
 
 ```bash
 git clone https://github.com/yourusername/spacewind.git
@@ -151,101 +142,36 @@ cd spacewind
 
 python3 -m venv venv
 source venv/bin/activate
-
 pip install -r requirements.txt
-```
 
-### Configure environment
-
-```bash
 cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+# Add your GEMINI_API_KEY to .env
 ```
 
-### Run the main app
+### Run
 
 ```bash
+# Main app (website + converter + webhook)
 python3 main.py
-# Serves on http://localhost:8000
-```
 
-The main app mounts:
-- `/` — main website frontend
-- `/converted` — static PDF download directory
-- `/mini_projects` — mini projects static files
-
-### Run SheepBot separately
-
-```bash
-cd sheep/backend
-python3 main.py
-# API at http://localhost:8000/api
-# UI at http://localhost:8000/app
-```
-
-### Run the Hackathon backend
-
-```bash
-cd hackathon/backend
-python3 main.py
-# Serves on http://localhost:8700
+# SheepBot standalone
+cd sheep/backend && python3 main.py
 ```
 
 ---
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` before running:
-
-| Variable | Description | Required by |
-|---|---|---|
-| `GEMINI_API_KEY` | Google Gemini API key | SheepBot (`sheep/backend/main.py`) |
-
----
-
-## Feature Flags
-
-In `main.py`, three boolean flags control which modules are loaded at startup:
-
-```python
-RUN_WORDTOPDF = True   # Enables /convert endpoint and /converted static mount
-RUN_FRONTEND  = True   # Serves the main website and registers the /webhook endpoint
-RUN_PORTFOLIO = True   # Spawns the portfolio HTTP server on port 5505
-```
-
-Set any flag to `False` to disable that module without touching any other code.
-
----
-
-## API Reference
-
-### Word-to-PDF
-
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/convert` | Upload a `.docx` file, get back a PDF download link |
-
-### GitHub Webhook
-
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/webhook` | GitHub push event handler — pulls main branch |
-| `POST` | `/webhook-direct` | Fallback direct pull endpoint |
-
-### SheepBot
-
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/upload/` | Upload a document (PDF, DOCX, TXT, image, Excel) |
-| `POST` | `/api/query/?question=...` | Ask a question against uploaded documents |
-| `GET`  | `/api/files/` | List all uploaded files with metadata and chunk count |
+| Variable | Used by |
+|---|---|
+| `GEMINI_API_KEY` | `sheep/backend/main.py` — Gemini RAG pipeline |
 
 ---
 
 ## Notes
 
-- **Availability**: The site is self-hosted on a laptop — it may be offline if the machine is off or sleeping.
-- **CORS**: Currently set to `allow_origins=["*"]` for development convenience. Restrict this in production.
-- **Webhook repo path**: `main_sapacewind/backend/webhook/handler.py` has the repo path hardcoded to `/home/rohit/work/github/spacewind`. Update this if the deployment path changes.
-- **SheepBot data**: ChromaDB data persists in `sheep/chroma_db/`. Documents auto-expire after 6 hours.
-- **Scyther & Lawkar**: These are planned projects — currently placeholder directories.
+- **Availability**: Self-hosted on a laptop — offline when the machine is sleeping.
+- **CORS**: Set to `allow_origins=["*"]` for development. Restrict before exposing to production traffic.
+- **Webhook path**: `webhook/handler.py` has the repo path hardcoded to `/home/rohit/work/github/spacewind` — update if your deployment path differs.
+- **SheepBot data**: Persists in `sheep/chroma_db/`. Chunks auto-expire after 6 hours.
+- **Scyther & Lawkar**: Planned projects — placeholder directories only.
